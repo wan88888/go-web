@@ -26,11 +26,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: Verify Chrome Installation
-        run: google-chrome --version
-
       - name: Run UI Tests in Headless Mode
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" go test -v -failfast ./...
+          xvfb-run --auto-servernum go test -v ./...

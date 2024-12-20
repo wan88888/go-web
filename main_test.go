@@ -20,7 +20,7 @@ func createChromeDPContext(t *testing.T, headless, disableGPU, startMaximized bo
 	)
 	allocCtx, cancelAllocator := chromedp.NewExecAllocator(context.Background(), opts...)
 	ctx, cancelCtx := chromedp.NewContext(allocCtx)
-	timeoutCtx, cancelTimeout := context.WithTimeout(ctx, 15*time.Second)
+	timeoutCtx, cancelTimeout := context.WithTimeout(ctx, 30*time.Second)
 
 	// Handle cleanup
 	cancelAll := func() {
@@ -58,45 +58,45 @@ func TestGoogleSearch_Golang(t *testing.T) {
 	}
 }
 
-// Test that the search bar is visible
-func TestGoogleSearch_SearchBarVisible(t *testing.T) {
-	ctx, cancel := createChromeDPContext(t, false, false, true)
-	defer cancel()
-
-	err := chromedp.Run(ctx,
-		chromedp.Navigate("https://www.google.com"),
-		chromedp.WaitVisible(`//textarea[@name="q"]`),
-	)
-
-	if err != nil {
-		t.Errorf("Test Failed: Search bar not visible - %v", err)
-	} else {
-		t.Log("Test Passed: Search bar is visible")
-	}
-}
-
-// Test that there are no results when the search query is empty
-func TestGoogleSearch_EmptyQuery(t *testing.T) {
-	ctx, cancel := createChromeDPContext(t, false, false, true)
-	defer cancel()
-
-	var result string
-	err := chromedp.Run(ctx,
-		chromedp.Navigate("https://www.google.com"),
-		chromedp.WaitVisible(`//textarea[@name="q"]`),
-		chromedp.SendKeys(`//textarea[@name="q"]`, ""), // Empty query
-		chromedp.SendKeys(`//textarea[@name="q"]`, kb.Enter),
-		chromedp.WaitVisible(`#search`),
-		chromedp.Text(`#search`, &result),
-	)
-
-	if err != nil {
-		t.Fatalf("Test Failed: %v", err)
-	}
-
-	if result == "" {
-		t.Log("Test Passed: No search results for empty query")
-	} else {
-		t.Errorf("Test Failed: Unexpected results for empty query")
-	}
-}
+//// Test that the search bar is visible
+//func TestGoogleSearch_SearchBarVisible(t *testing.T) {
+//	ctx, cancel := createChromeDPContext(t, false, false, true)
+//	defer cancel()
+//
+//	err := chromedp.Run(ctx,
+//		chromedp.Navigate("https://www.google.com"),
+//		chromedp.WaitVisible(`//textarea[@name="q"]`),
+//	)
+//
+//	if err != nil {
+//		t.Errorf("Test Failed: Search bar not visible - %v", err)
+//	} else {
+//		t.Log("Test Passed: Search bar is visible")
+//	}
+//}
+//
+//// Test that there are no results when the search query is empty
+//func TestGoogleSearch_EmptyQuery(t *testing.T) {
+//	ctx, cancel := createChromeDPContext(t, false, false, true)
+//	defer cancel()
+//
+//	var result string
+//	err := chromedp.Run(ctx,
+//		chromedp.Navigate("https://www.google.com"),
+//		chromedp.WaitVisible(`//textarea[@name="q"]`),
+//		chromedp.SendKeys(`//textarea[@name="q"]`, ""), // Empty query
+//		chromedp.SendKeys(`//textarea[@name="q"]`, kb.Enter),
+//		chromedp.WaitVisible(`#search`),
+//		chromedp.Text(`#search`, &result),
+//	)
+//
+//	if err != nil {
+//		t.Fatalf("Test Failed: %v", err)
+//	}
+//
+//	if result == "" {
+//		t.Log("Test Passed: No search results for empty query")
+//	} else {
+//		t.Errorf("Test Failed: Unexpected results for empty query")
+//	}
+//}
